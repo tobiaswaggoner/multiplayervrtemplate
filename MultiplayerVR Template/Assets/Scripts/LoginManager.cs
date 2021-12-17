@@ -10,7 +10,7 @@ public class LoginManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
+
 
     }
 
@@ -18,6 +18,15 @@ public class LoginManager : MonoBehaviourPunCallbacks
     void Update()
     {
         
+    }
+
+    #endregion
+
+    #region UI Callback Methods
+
+    public void LoginAnonymously()
+    {
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     #endregion
