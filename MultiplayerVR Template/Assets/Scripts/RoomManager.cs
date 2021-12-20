@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -42,6 +44,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log($"LOCAL player {PhotonNetwork.NickName} joined room {PhotonNetwork.CurrentRoom.Name}. Player count: {PhotonNetwork.CurrentRoom.PlayerCount}");
+
+        if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(MultiPlayerVrConstants.MAP_TYPE_KEY, out var mapType))
+        {
+            Debug.Log($"Joined room with map type { (string) mapType}");
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -52,7 +59,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private void CreateAndJoinRoom()
     {
         var randomRoomName = "Room" + Random.Range(0, 10000);
-        var roomOptions = new RoomOptions { MaxPlayers = 20};
+        var roomPropsInLobby = new [] {  MultiPlayerVrConstants.MAP_TYPE_KEY };
+        var customRoomProps = new Hashtable { {MultiPlayerVrConstants.MAP_TYPE_KEY, MultiPlayerVrConstants.MAP_TYPE_VALUE_SCHOOL } };
+        var roomOptions = new RoomOptions
+        {
+            MaxPlayers = 20,
+            CustomRoomPropertiesForLobby = roomPropsInLobby,
+            CustomRoomProperties = customRoomProps,
+        };
 
         PhotonNetwork.CreateRoom(randomRoomName, roomOptions);
     }
