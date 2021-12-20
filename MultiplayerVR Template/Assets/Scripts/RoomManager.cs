@@ -8,6 +8,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+
+    private string _mapType;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +28,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom();
     }
 
+    public void OnEnterButtonClicked_Outdoor()
+    {
+        _mapType = MultiPlayerVrConstants.MAP_TYPE_VALUE_OUTDOOR;
+        var customRoomProps = new Hashtable { {MultiPlayerVrConstants.MAP_TYPE_KEY, _mapType } };
+        PhotonNetwork.JoinRandomRoom(customRoomProps, 0);
+    }
+
+    public void OnEnterButtonClicked_School()
+    {
+        _mapType = MultiPlayerVrConstants.MAP_TYPE_VALUE_SCHOOL;
+        var customRoomProps = new Hashtable { {MultiPlayerVrConstants.MAP_TYPE_KEY, _mapType } };
+        PhotonNetwork.JoinRandomRoom(customRoomProps, 0);
+    }
     #endregion
 
     #region Photon Callback Methods
@@ -60,7 +75,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         var randomRoomName = "Room" + Random.Range(0, 10000);
         var roomPropsInLobby = new [] {  MultiPlayerVrConstants.MAP_TYPE_KEY };
-        var customRoomProps = new Hashtable { {MultiPlayerVrConstants.MAP_TYPE_KEY, MultiPlayerVrConstants.MAP_TYPE_VALUE_SCHOOL } };
+        var customRoomProps = new Hashtable { {MultiPlayerVrConstants.MAP_TYPE_KEY, _mapType } };
         var roomOptions = new RoomOptions
         {
             MaxPlayers = 20,
